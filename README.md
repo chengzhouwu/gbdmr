@@ -43,7 +43,7 @@ All the work is done by one command `gbdmr` and for more information use `?gbdmr
 Example
 -------
 
-An example dataset `beta` and `phenotype` is included in the package. It contains 1,000 CpG sites for 506 samples. Finding regions in this data can be accomplished using commands:
+An example dataset `beta` and `phenotype`. It contains 1,000 CpG sites for 506 samples. Finding regions in this data can be accomplished using commands:
 
 ```s
 data(beta)
