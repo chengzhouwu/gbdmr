@@ -21,6 +21,8 @@ gbdmr is used to identify the differential methylated CpG regions for the microa
 
 \author{ChengzhouWu, Xichen Mou, Hongmei Zhang}
 \examples{
+##############################################################################
+#DMR finding
 data(beta)
 data(phenotype)
 rho <- seq(0,1,0.1)
@@ -34,8 +36,45 @@ gbdmr(beta,phenotype,rho)
 # find the trait of the CpG sites:
 https://ngdc.cncb.ac.cn/ewas
 
+##############################################################################
 ##mediation analysis
+Y <- new_variable$ASTHMA_18
+X <- new_variable$BMI_CLUSTER.x
+M <- new_beta[rownames(new_beta) == "cg09705784",]
+M <- as.numeric(M[1,])
 
+model.0 <- glm(Y~X)
+summary(model.0)
 
+model.M <- glm(M ~ X)
+summary(model.M)
+
+model.Y <- glm(Y ~ X + M)
+summary(model.Y)
+
+# ACME value
+library(mediation)
+results <- mediate(model.M, model.Y, treat="X", mediator = "M", boot = T, sims=500)
+summary(results)
+##############################################################################
+##association study
+Y <- new_variable$ASTHMA_18
+X1 <- new_variable$POLLEN_18
+X2 <- new_beta[rownames(new_beta) == "cg22024479",]
+X2 <- as.numeric(X2[1,])
+X3 <- new_variable$SEX_0.x
+
+model1 <- glm(Y ~ X1 + X2 + X3 + X1*X2 + X1*X3 + X2*X3)
+summary(model1)
+model2 <- glm(Y ~ X1 + X2)
+summary(model2)
+model3 <- glm(Y ~ X1 + X2 + X3 )
+summary(model3)
+coef <- model2$coefficients[2]
+se <- summary(model2)$coefficients[2,2]
+OR <- exp(round(coef,2))
+OR
+round(exp(round(coef,2)+ 1.96*se),2)
+round(exp(round(coef,2)-1.96*se),2)
 
 }
