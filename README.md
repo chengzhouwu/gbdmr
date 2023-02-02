@@ -1,4 +1,4 @@
-gbdmr
+gbdmr 
 =======
 
 An R package for identification of differentially methylated regions (DMRs) from high density chip data. 
