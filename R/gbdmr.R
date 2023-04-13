@@ -1,5 +1,3 @@
-# revised based on the gbdmr.R file
-
 # beta is the methylation matrix, the row is the CpG name, and column is the participant
 # phenotype is the covariable matrix, which should make all values numeric
 # rho is the threshold for the block finding
