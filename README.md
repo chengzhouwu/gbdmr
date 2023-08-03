@@ -95,14 +95,5 @@ OR
 round(exp(round(coef,2)+ 1.96*se),2)
 round(exp(round(coef,2)-1.96*se),2)
 ```
-Extended application
--------
 
-A [simple example](https://rpubs.com/chengzhouwu/973206)
-showing how to apply *gbdmr* to a microarray dataset  and cluster the CpG sites by correlation.
-
-Detailed DMR finding example
--------
-A [simple example](https://rpubs.com/chengzhouwu/973223)
-showing how to apply *gbdmr* to a microarray dataset  and find DMRs.
 
