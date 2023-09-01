@@ -22,12 +22,12 @@ Installation
 
 ```s
 library(devtools)
-library(maxLik)
 install_github("chengzhouwu/gbdmr")
 ```
 To start using the package just load it as any other package.
 
 ```s
+library(maxLik)
 library(gbdmr)
 ```
 
