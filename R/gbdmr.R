@@ -170,13 +170,33 @@ gbdmr <- function(beta, phenotype, rho)
   record.p.independent=rep(NA,nrow(beta))
   max(clusterIDs)
   tt=proc.time()
-  for (ID in 1:max(clusterIDs)){
-    index=which(clusterIDs==ID)
-    res=ht(t.beta[,index],X)
-    record.p.independent[index]=res$p.lr 
-    
+  ########################################################
+  #### add parallel computation algorithm
+  library(doParallel)
+  detectCores(logical = FALSE)
+  cl <- makeCluster(detectCores())
+  registerDoParallel(cl)
+
+  # Initialize a list to store unique cluster IDs and corresponding p-values
+  unique_cluster_ids <- unique(clusterIDs)
+  result_list <- vector("list", length = length(unique_cluster_ids))
+  # Perform parallel computation for unique cluster IDs
+  result_list <- foreach(ID = unique_cluster_ids, .combine = c) %dopar% {
+  library(maxLik)  # Load maxLik in the main session
+  index <- which(clusterIDs == ID)
+  res <- ht(t.beta[, index], X)
+  res$p.lr
   }
 
+  # Stop parallel cluster
+  stopCluster(cl)
+  # Create a named vector with unique cluster IDs and their corresponding p-values
+  p_values <- setNames(unlist(result_list), unique_cluster_ids)
+
+  # Map p-values to original cluster IDs
+  record.p.independent <- p_values[as.character(clusterIDs)]
+
+  ########################################################
   result_LR <- data.frame(cpg = rownames(beta), clusterIDs = clusterIDs, raw_p_value = record.p.independent )
   all_sig_cpG <- result_LR[result_LR$raw_p_value < 0.05/totalcompare,]
   cpg_name_LR <- all_sig_cpG$cpg
