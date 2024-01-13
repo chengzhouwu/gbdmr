@@ -29,6 +29,8 @@ To start using the package just load it as any other package.
 ```s
 library(maxLik)
 library(gbdmr)
+library(doParallel)
+library(foreach)
 ```
 
 Usage
