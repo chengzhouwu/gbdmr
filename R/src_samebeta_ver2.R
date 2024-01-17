@@ -8,7 +8,7 @@ library(maxLik)
 # X: covariates: n by p matrix; n is sample size; p is number of covariates; the first column must be phenotype
 #output
 # an maxLik object consisting of maximum likelihood, estimate, etc...
-get.mle.reg<-function(Z,X){
+get.mle.reg <-function(Z,X){
   X=as.matrix(X)
   Z=as.matrix(Z)
   p=ncol(X)-1
@@ -37,19 +37,29 @@ get.mle.reg<-function(Z,X){
       coef.beta=rbind(coef.intercept,matrix(coef.covariate,nrow=p,ncol=L))
       beta=theta[p+L+1]
       alpha=exp(X%*%coef.beta)*beta
+      if (L!=1){
+        nom1=sum(lgamma(rowSums(alpha)+ beta))
+        nom2=sum((alpha-1)*log.Z)-sum((alpha+1)*log.1mZ)
+        denom1=sum(lgamma(alpha))+n*lgamma(beta)
+        denom2=sum((rowSums(alpha)+beta)*log.denom)
+        return (nom1+nom2-denom1-denom2)
+      }else{
+        return (sum(dbeta(Z,alpha,rep(beta,length(alpha)),log=TRUE)))  
+      }
     }else{
       coef.beta=matrix(coef.intercept,nrow=1)
       beta=theta[p+L+1]
+      alpha.unique=exp(coef.beta)*beta
       alpha=matrix(exp(coef.beta)*beta,nrow=n,ncol=L,byrow=TRUE)
-    }
-    if (L!=1){
-      nom1=sum(lgamma(rowSums(alpha)+ beta))
-      nom2=sum((alpha-1)*log.Z)-sum((alpha+1)*log.1mZ)
-      denom1=sum(lgamma(alpha))+n*lgamma(beta)
-      denom2=sum((rowSums(alpha)+beta)*log.denom)
-      return (nom1+nom2-denom1-denom2)
-    }else{
-      return (sum(log(dbeta(Z,alpha,rep(beta,length(alpha))))))
+      if (L!=1){
+        nom1=n*lgamma(sum(alpha.unique)+beta)
+        nom2=sum((alpha-1)*log.Z)-sum((alpha+1)*log.1mZ)
+        denom1=sum(lgamma(alpha.unique))*n+n*lgamma(beta)
+        denom2=sum((sum(alpha.unique)+beta)*log.denom)
+        return (nom1+nom2-denom1-denom2)
+      }else{
+        return (sum(dbeta(Z,alpha.unique,beta,log=TRUE)))
+      }
     }
   }
   A=matrix(rep(0,p+L+1),nrow=1)
@@ -57,8 +67,8 @@ get.mle.reg<-function(Z,X){
   B=as.matrix(0)
   res <- maxLik(llk, start = starter,constraints=list(ineqA=A, ineqB=B),iterlim=10000)
   return (res)
-  
 }
+
 
 
 #output:joint p value of profile likelihood ratio/Wald method for that block (consiting of L CpG sites)
