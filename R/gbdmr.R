@@ -175,7 +175,8 @@ gbdmr <- function(beta, phenotype, rho, ntask)
   #### add parallel computation algorithm
   library(doParallel)
   #detectCores(logical = FALSE)
-  cl <- makeCluster(ntask)
+  tasknumber <- ntask
+  cl <- makeCluster(tasknumber)
   registerDoParallel(cl)
 
   # Initialize a list to store unique cluster IDs and corresponding p-values
