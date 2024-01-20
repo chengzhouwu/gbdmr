@@ -6,13 +6,14 @@ regression method}
 \Description{Identifying differentially methylated CpG
 regions efficiently with generalized beta regression}
 \usage{
-gbdmr(beta,phenotype,rho,debug = F)
+gbdmr(beta,phenotype,rho,ntask,debug = F)
 }
 \arguments{
 
 \item{beta}{A matrix where columns are samples and rows correspond to the sites}
 \item{phenotype}{A matrix where columns are variables and rows correspond to the samples}
 \item{rho}{A correlation value ranges from 0 to 1}
+\item{ntask}{parallel computing task number, default the maximum number of parallel tasks available on the machine}
 }
 \value{
 A list containing all candidate regions and their summary statistics.
