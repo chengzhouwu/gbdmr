@@ -32,7 +32,7 @@ rho <- seq(0,1,0.1)
 i <- 1:length()
 
 # Find regions
-gbdmr(beta,phenotype,rho)
+gbdmr(beta,phenotype,rho, ntask = NULL)
 # rho should be a specific value eg. 0.5
 # the result will return three list: one all test statistics; one positive CpG sites test statistics; one positive CpG names.
 
