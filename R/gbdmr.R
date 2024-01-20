@@ -1,8 +1,9 @@
 # beta is the methylation matrix, the row is the CpG name, and column is the participant
 # phenotype is the covariable matrix, which should make all values numeric
 # rho is the threshold for the block finding
+# ntask is the parallel computation task number
 
-gbdmr <- function(beta, phenotype, rho)
+gbdmr <- function(beta, phenotype, rho, ntask)
 {
   library(maxLik)
   library(IlluminaHumanMethylation450kanno.ilmn12.hg19)
@@ -173,8 +174,8 @@ gbdmr <- function(beta, phenotype, rho)
   ########################################################
   #### add parallel computation algorithm
   library(doParallel)
-  detectCores(logical = FALSE)
-  cl <- makeCluster(detectCores())
+  #detectCores(logical = FALSE)
+  cl <- makeCluster(ntask)
   registerDoParallel(cl)
 
   # Initialize a list to store unique cluster IDs and corresponding p-values
