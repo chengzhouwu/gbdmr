@@ -31,6 +31,11 @@ library(maxLik)
 library(gbdmr)
 library(doParallel)
 library(foreach)
+library(IlluminaHumanMethylation450kanno.ilmn12.hg19)
+library(minfi)
+library(geograbi)  ## https://github.com/yousefi138
+library(limma)
+library(corrplot)
 ```
 
 Usage
